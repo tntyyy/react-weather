@@ -1,6 +1,6 @@
-import React, { Children } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import Background from '../../static/night.jpg';
+import { getTimeOfDay } from '../../utils';
 
 import styles from './Wrapper.module.css';
 
@@ -9,8 +9,18 @@ interface IWrapper {
 }
 
 const Wrapper: React.FC<IWrapper> = ({ children }) => {
+  const [timeOfDay, setTimeOfDay] = useState<string | undefined>('');
+
+  useEffect(() => {
+    const time = getTimeOfDay(new Date().getHours());
+    setTimeOfDay(time);
+  }, []);
+
   return (
-    <main className={styles.wrapper} style={{ backgroundImage: `url(${Background}` }}>
+    <main
+      className={styles.wrapper}
+      style={{ backgroundImage: `url(/static/${timeOfDay ? timeOfDay : 'noon'}.jpg)` }}
+    >
       {children}
     </main>
   );
